@@ -1,0 +1,8 @@
+include:
+  base_config: configs/anyvisloc_baseline.yaml
+
+run:
+  scene: Scene_01
+  limit: 120
+  note: Reproduce existing Scene_01 baseline subset and analyze error cases.
+

@@ -1,0 +1,76 @@
+# 注意：带内部斜杠的模式会被锚定到仓库根，跨层级必须用 **/ 前缀
+
+# ===== 实验产物与输出：绝不入库 =====
+# 只保留模板与汇总索引
+**/experiments/*
+!**/experiments/_template/
+!**/experiments/_template/**
+!**/experiments/index.csv
+**/outputs/
+**/runs/
+**/wandb/
+**/mlruns/
+
+# ===== 数据与权重：只保留清单 =====
+**/data/*
+!**/data/README.md
+!**/data/manifest.json
+**/weights/*
+!**/weights/README.md
+!**/weights/manifest.json
+
+# ===== 第三方工程走 submodule，不提交内容 =====
+**/third_party/*/
+!**/third_party/README.md
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+ENV/
+
+# ===== 测试与静态检查缓存 =====
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+
+# ===== 编辑器与系统 =====
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ===== 密钥与本地配置 =====
+.env
+.env.*
+!.env.example
+
+# ===== 临时与日志 =====
+*.log
+*.tmp
+*.bak
+
+# ===== 大文件兜底 =====
+# 若以后测试夹具需要这些格式，用 !tests/fixtures/** 单独放行
+*.pkl
+*.npy
+*.npz
+*.pt
+*.pth
+*.onnx
+*.engine
+*.h5
+*.ckpt

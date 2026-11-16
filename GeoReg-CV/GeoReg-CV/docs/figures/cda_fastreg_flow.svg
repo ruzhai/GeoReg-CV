@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="760" viewBox="0 0 1500 760">
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#334155"/>
+    </marker>
+    <style>
+      .title{font:700 34px 'Microsoft YaHei', Arial; fill:#0f172a}
+      .sub{font:400 18px 'Microsoft YaHei', Arial; fill:#475569}
+      .box{fill:#f8fafc; stroke:#334155; stroke-width:2.2; rx:18}
+      .fast{fill:#ecfeff; stroke:#0891b2}
+      .judge{fill:#fff7ed; stroke:#ea580c}
+      .fallback{fill:#fef2f2; stroke:#dc2626}
+      .out{fill:#f0fdf4; stroke:#16a34a}
+      .txt{font:600 22px 'Microsoft YaHei', Arial; fill:#0f172a}
+      .small{font:400 17px 'Microsoft YaHei', Arial; fill:#475569}
+      .edge{stroke:#334155; stroke-width:2.4; fill:none; marker-end:url(#arrow)}
+      .yes{stroke:#16a34a}
+      .no{stroke:#dc2626}
+      .badge{font:600 18px 'Microsoft YaHei', Arial}
+    </style>
+  </defs>
+  <rect width="1500" height="760" fill="#ffffff"/>
+  <text x="55" y="58" class="title">CDA-FastReg：置信度驱动的自适应快速空间配准策略</text>
+  <text x="55" y="92" class="sub">先走 Top1 快速路径；若匹配内点数不足，则回退到 Top2/Top5 精配准路径，兼顾速度与稳健性。</text>
+
+  <rect x="80" y="170" width="220" height="110" class="box"/>
+  <text x="190" y="215" text-anchor="middle" class="txt">观察者视角图像</text>
+  <text x="190" y="248" text-anchor="middle" class="small">oblique query</text>
+
+  <rect x="370" y="170" width="250" height="110" class="box fast"/>
+  <text x="495" y="207" text-anchor="middle" class="txt">Top1 快速路径</text>
+  <text x="495" y="238" text-anchor="middle" class="small">检索 + RoMa 匹配 + PnP</text>
+  <text x="495" y="263" text-anchor="middle" class="small">平均 16.42 s</text>
+
+  <rect x="710" y="155" width="270" height="140" class="box judge"/>
+  <text x="845" y="205" text-anchor="middle" class="txt">置信度判断</text>
+  <text x="845" y="238" text-anchor="middle" class="small">best_inliers ≥ T ?</text>
+  <text x="845" y="265" text-anchor="middle" class="small">推荐 T=1000</text>
+
+  <rect x="1080" y="105" width="280" height="115" class="box out"/>
+  <text x="1220" y="150" text-anchor="middle" class="txt">高置信：直接输出</text>
+  <text x="1220" y="183" text-anchor="middle" class="small">估计地理位置</text>
+
+  <rect x="1080" y="330" width="280" height="130" class="box fallback"/>
+  <text x="1220" y="374" text-anchor="middle" class="txt">低置信：回退</text>
+  <text x="1220" y="407" text-anchor="middle" class="small">Top2 / Top5 精配准</text>
+  <text x="1220" y="434" text-anchor="middle" class="small">回退比例约 8.33%</text>
+
+  <rect x="710" y="560" width="360" height="115" class="box out"/>
+  <text x="890" y="604" text-anchor="middle" class="txt">最终空间位置输出</text>
+  <text x="890" y="637" text-anchor="middle" class="small">Pred(x,y,z) + Error + 可视化/仿真数据</text>
+
+  <path d="M300 225 L365 225" class="edge"/>
+  <path d="M620 225 L705 225" class="edge"/>
+  <path d="M980 205 C1020 180 1040 165 1075 162" class="edge yes"/>
+  <text x="1012" y="168" class="badge" fill="#16a34a">Yes</text>
+  <path d="M980 255 C1035 295 1040 360 1075 386" class="edge no"/>
+  <text x="1015" y="329" class="badge" fill="#dc2626">No</text>
+  <path d="M1220 220 L1220 510 C1220 590 1135 618 1075 618" class="edge yes"/>
+  <path d="M1080 420 C990 455 925 505 900 555" class="edge no"/>
+
+  <rect x="85" y="405" width="500" height="210" rx="18" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="115" y="445" class="txt">实验观察（Scene_01 limit=120）</text>
+  <text x="115" y="482" class="small">Standard Top5：Success@5m 98.33%，Mean Time 23.72s</text>
+  <text x="115" y="514" class="small">Fixed Top1：Success@5m 91.67%，Mean Time 16.42s</text>
+  <text x="115" y="546" class="small">Adaptive Top1→Top2：Success@5m 99.17%，Mean Time 17.43s</text>
+  <text x="115" y="578" class="small">结论：保留稳健性，同时获得约 1.36× 平均加速</text>
+</svg>
