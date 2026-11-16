@@ -1,0 +1,4 @@
+-r common.txt
+
+ruff==0.17.5
+mypy==2.4.1

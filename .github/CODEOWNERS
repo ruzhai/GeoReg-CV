@@ -1,0 +1,13 @@
+# 改到别人的目录会自动请求对方 review
+*                                  @ruzhai
+/src/crossview/schema/             @ruzhai @FCCawaw
+/src/crossview/core/timealign/     @FCCawaw
+/src/crossview/adaptors/datasets/  @FCCawaw
+/src/crossview/core/geometry/      @ruzhai
+/src/crossview/core/routing/       @ruzhai
+/src/crossview/core/metrics/       @ruzhai
+/src/crossview/adaptors/matchers/  @ruzhai
+/src/crossview/adaptors/retrievers/ @ruzhai
+/configs/                          @ruzhai
+/docs/                             @ruzhai
+/.github/                          @ruzhai

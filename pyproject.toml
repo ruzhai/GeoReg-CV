@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crossview"
+version = "0.1.0"
+description = "跨视角协同感知：多平台异步异视角图像的空间配准与目标关联"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "pydantic>=2.5",
+    "PyYAML>=6",
+]
+
+[project.optional-dependencies]
+viz = ["opencv-python>=4.8", "pillow>=10", "matplotlib>=3.7"]
+dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.6", "mypy>=1.8"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+extend-exclude = ["third_party", "experiments", "outputs", "matlab", ".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+# E501 交给 ruff format 处理；SVG/PIL 里的长字符串无法自动换行
+ignore = ["B008", "E501"]
+
+[tool.mypy]
+python_version = "3.10"
+files = ["src/crossview/schema", "src/crossview/registry.py"]
+ignore_missing_imports = true
+warn_unused_ignores = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+markers = [
+    "gpu: 需要 CUDA",
+    "data: 需要数据集或权重",
+    "slow: 分钟级以上",
+]

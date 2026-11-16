@@ -1,0 +1,11 @@
+-r common.txt
+
+# 训练与推理。装 CUDA 版时用官方 index：
+#   pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cu124
+torch==2.14.1
+torchvision==0.19.1
+
+# 测试
+pytest==9.1.1
+pytest-cov==7.1.0
+pytest-timeout==2.4.0

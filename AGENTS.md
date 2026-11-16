@@ -98,13 +98,13 @@ class GeoRegistrationRecord(BaseModel):
 
 | 范围 | 负责人 |
 |---|---|
-| `core/timealign/`、`adaptors/datasets/` | 待定 |
-| `core/geometry/`、`core/routing/`、`core/metrics/` | 待定 |
-| `adaptors/matchers/`、`adaptors/backbones/` | 待定 |
-| `schema/` | 两人共同 review |
-| `configs/`、`docs/`、`tests/fixtures/` | 待定 |
+| `core/timealign/`、`adaptors/datasets/` | fcc |
+| `core/geometry/`、`core/routing/`、`core/metrics/` | 用户 |
+| `adaptors/matchers/`、`adaptors/backbones/` | 用户 |
+| `schema/` | 改动必须对方 review |
+| `configs/`、`docs/`、`tests/fixtures/`、`pipelines/` | 用户 |
 
-改自己的目录随便改；改别人的目录走 PR；改 `schema/` 必须两人 review。
+两个人在同一个分支上并行改不同目录；改对方的目录走 PR。改 `schema/` 必须先合对方确认——只有两个人时，这是唯一能防止契约被单方面改掉的机制。
 
 ## 文档与实验
 

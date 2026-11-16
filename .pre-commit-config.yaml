@@ -1,0 +1,12 @@
+minimum_pre_commit_version: "3.0.0"
+exclude: ^(third_party|experiments|outputs|matlab)/
+
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.5
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+        files: ^(src|tests|scripts)/
+      - id: ruff-format
+        files: ^(src|tests|scripts)/
