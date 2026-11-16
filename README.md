@@ -70,7 +70,8 @@ src/crossview/
 需要数据集和权重，见 [data/README.md](data/README.md)。
 
 ```bash
-export CROSSVIEW_DATA_ROOT="D:/GD/Benchmark"
+export CROSSVIEW_DATA_ROOT="D:/桌面放置/26年大创"
+python scripts/inspect_dataset.py      # 先确认数据挂对了
 
 python -m crossview.pipelines.run_online_cda_sample --help
 python -m crossview.pipelines.run_online_cda_sample \

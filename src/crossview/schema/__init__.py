@@ -3,7 +3,12 @@
 from crossview.schema.configs import Config, DataConfig, RoutingConfig, expand_env
 from crossview.schema.enums import CoordinateFrame, FailureReason, RegistrationRoute, TargetClass
 from crossview.schema.records import SCHEMA_VERSION, GeoRegistrationRecord, MetricsSummary
-from crossview.schema.samples import ObserverReferenceSample, ObserverView, ReferenceView
+from crossview.schema.samples import (
+    ObserverReferenceSample,
+    ObserverView,
+    ReferenceView,
+    SceneReference,
+)
 from crossview.schema.serialization import dumps, export_schemas, loads, read, write
 
 __all__ = [
@@ -18,6 +23,7 @@ __all__ = [
     "ObserverView",
     "ReferenceView",
     "RegistrationRoute",
+    "SceneReference",
     "RoutingConfig",
     "TargetClass",
     "dumps",

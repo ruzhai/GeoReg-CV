@@ -1,9 +1,14 @@
 {
   "datasets": [
     {
-      "name": "AnyVisLoc",
-      "path": "Data/AnyVisLoc",
-      "size_bytes": null,
+      "name": "Scene_01",
+      "format_version": "anyvisloc_ref_png_npy_json_v1",
+      "path": "Scene_01",
+      "scenes": ["Scene_01"],
+      "samples": 1846,
+      "modes": ["aerial", "satellite"],
+      "map_resolution_m": 0.32,
+      "size_bytes": 5911348480,
       "sha256": null,
       "source": "待填",
       "owner": "待填"

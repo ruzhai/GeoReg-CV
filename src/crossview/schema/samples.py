@@ -29,6 +29,24 @@ class ReferenceView(BaseModel):
     coordinate_system: str = ""
 
 
+class SceneReference(BaseModel):
+    """一个场景的参考视图及其地理元数据。
+
+    分辨率与原点决定了像素坐标和米制坐标之间的换算，缺了它们就无法反解位置。
+    """
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    scene: str
+    mode: str = "aerial"
+    map_path: Path
+    dsm_path: Path | None = None
+    map_resolution: tuple[float, float] | None = None
+    dsm_resolution: tuple[float, float] | None = None
+    map_origin_local: tuple[float, float] | None = None
+    dsm_origin_local: tuple[float, float] | None = None
+
+
 class ObserverReferenceSample(BaseModel):
     """一个标准化样本：观察者视角 + 参考视角。"""
 
