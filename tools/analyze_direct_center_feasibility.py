@@ -43,7 +43,7 @@ def main():
     pnp = [number(row.get("pnp_center_error_m")) for row in rows]
     direct = [number(row.get("direct_center_error_m")) for row in rows]
     hybrid = [number(row.get("hybrid_center_error_m")) for row in rows]
-    paired = [(d, p) for d, p in zip(direct, pnp) if d is not None and p is not None]
+    paired = [(d, p) for d, p in zip(direct, pnp, strict=False) if d is not None and p is not None]
     methods = {}
     for row in rows:
         method = row.get("center_method") or "unknown"
@@ -66,7 +66,7 @@ def main():
     for threshold in (0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90):
         selected = []
         direct_count = 0
-        for row, direct_error, pnp_error in zip(rows, direct, pnp):
+        for row, direct_error, pnp_error in zip(rows, direct, pnp, strict=False):
             confidence = number(row.get("center_confidence"))
             if direct_error is not None and confidence is not None and confidence >= threshold:
                 selected.append(direct_error)
@@ -79,19 +79,21 @@ def main():
     summary["confidence_threshold_sweep"] = threshold_sweep
     summary["development_default_threshold"] = 0.70
     policy_rows = []
-    for row, direct_error, pnp_error in zip(rows, direct, pnp):
+    for row, direct_error, pnp_error in zip(rows, direct, pnp, strict=False):
         confidence = number(row.get("center_confidence"))
         use_direct = bool(
             direct_error is not None and confidence is not None and confidence >= 0.70
         )
-        policy_rows.append({
-            "sample_id": row.get("sample_id"),
-            "center_confidence": confidence,
-            "direct_center_error_m": direct_error,
-            "pnp_center_error_m": pnp_error,
-            "selected_method": "direct_local_homography" if use_direct else "pnp_ray_fallback",
-            "selected_center_error_m": direct_error if use_direct else pnp_error,
-        })
+        policy_rows.append(
+            {
+                "sample_id": row.get("sample_id"),
+                "center_confidence": confidence,
+                "direct_center_error_m": direct_error,
+                "pnp_center_error_m": pnp_error,
+                "selected_method": "direct_local_homography" if use_direct else "pnp_ray_fallback",
+                "selected_center_error_m": direct_error if use_direct else pnp_error,
+            }
+        )
     policy_path = batch_dir / "direct_center_policy_t070.csv"
     with policy_path.open("w", encoding="utf-8-sig", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=list(policy_rows[0].keys()))

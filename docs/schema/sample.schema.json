@@ -1,0 +1,45 @@
+{
+  "additionalProperties": false,
+  "description": "一个标准化样本：观察者视角 + 参考视角。",
+  "properties": {
+    "scene": {
+      "title": "Scene",
+      "type": "string"
+    },
+    "sample_id": {
+      "title": "Sample Id",
+      "type": "string"
+    },
+    "observer_npz": {
+      "format": "path",
+      "title": "Observer Npz",
+      "type": "string"
+    },
+    "reference_map": {
+      "format": "path",
+      "title": "Reference Map",
+      "type": "string"
+    },
+    "reference_dsm": {
+      "anyOf": [
+        {
+          "format": "path",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reference Dsm"
+    }
+  },
+  "required": [
+    "scene",
+    "sample_id",
+    "observer_npz",
+    "reference_map"
+  ],
+  "title": "ObserverReferenceSample",
+  "type": "object"
+}

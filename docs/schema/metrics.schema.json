@@ -1,0 +1,51 @@
+{
+  "additionalProperties": false,
+  "description": "一组记录的聚合指标。",
+  "properties": {
+    "schema_version": {
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "count": {
+      "minimum": 0,
+      "title": "Count",
+      "type": "integer"
+    },
+    "mean_error_m": {
+      "title": "Mean Error M",
+      "type": "number"
+    },
+    "median_error_m": {
+      "title": "Median Error M",
+      "type": "number"
+    },
+    "success_1m": {
+      "default": 0.0,
+      "title": "Success 1M",
+      "type": "number"
+    },
+    "success_3m": {
+      "default": 0.0,
+      "title": "Success 3M",
+      "type": "number"
+    },
+    "success_5m": {
+      "default": 0.0,
+      "title": "Success 5M",
+      "type": "number"
+    },
+    "max_error_m": {
+      "default": 0.0,
+      "title": "Max Error M",
+      "type": "number"
+    }
+  },
+  "required": [
+    "count",
+    "mean_error_m",
+    "median_error_m"
+  ],
+  "title": "MetricsSummary",
+  "type": "object"
+}

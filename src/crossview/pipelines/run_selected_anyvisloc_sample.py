@@ -1,7 +1,7 @@
 """Run the official AnyVisLoc baseline for one explicitly selected sample.
 
 The official project is imported and patched in memory with a filtered dataset
-class. No files under D:/GD/Benchmark are modified.
+class. Files under CROSSVIEW_DATA_ROOT are never modified.
 """
 
 from __future__ import annotations
@@ -13,6 +13,7 @@ from pathlib import Path
 
 import yaml
 
+from crossview.paths import configs_dir, experiments_dir
 from crossview.pipelines.run_anyvisloc_baseline import build_command
 
 
@@ -37,12 +38,12 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--config",
-        default="D:/GeoReg-CV/configs/anyvisloc_baseline.yaml",
+        default=configs_dir() / "anyvisloc_baseline.yaml",
         help="GeoReg-CV baseline YAML configuration.",
     )
     parser.add_argument(
         "--save-dir",
-        default="D:/GeoReg-CV/experiments/selected_samples",
+        default=experiments_dir() / "selected_samples",
         help="Root directory for selected-sample results.",
     )
     parser.add_argument("--strategy", choices=["Top1", "Topn_opt"], default=None)

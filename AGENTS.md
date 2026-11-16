@@ -81,18 +81,26 @@ class GeoRegistrationRecord(BaseModel):
 
 ## 项目结构
 
-> 标（规划）的目录尚未创建，骨架落地后更新本表。
+所有代码在 `src/crossview/` 下。
 
 | 目录 | 负责 | 不负责 |
 |---|---|---|
+| `schema/` | 数据形状、枚举、Protocol、序列化 | 任何业务逻辑 |
 | `core/timealign/`（规划） | 时延建模、补帧、时间对齐 | 网络仿真器本身 |
-| `core/geometry/`（规划） | 单应、PnP、重投影、拓扑约束 | 模型推理 |
-| `core/routing/`（规划） | 候选选择与回退决策 | 匹配计算 |
-| `core/metrics/`（规划） | 精度与成功率统计 | 数据加载 |
-| `adaptors/`（规划） | 数据集、检索器、匹配器、骨干网络 | 任何算法决策 |
-| `pipelines/` | 编排、I/O、结果落盘 | 数学计算 |
+| `core/geometry/` | 单应、PnP、重投影、拓扑约束 | 文件与图像 IO |
+| `core/routing/` | 候选选择与回退决策 | 匹配计算 |
+| `core/metrics/` | 精度与成功率统计 | 数据加载 |
+| `imaging/` | 需要图像库的算法（允许 cv2） | 文件读写 |
+| `adaptors/datasets/` | 数据集适配 | 算法决策 |
+| `adaptors/matchers/` | 匹配器实现（含 `_template.py`） | 路由决策 |
+| `adaptors/retrievers/` | 检索器实现 | 路由决策 |
+| `adaptors/backbones/` | 轻量骨干网络 | 路由决策 |
+| `adaptors/io/` | 结果读写、产物落盘、仿真导出 | 数学计算 |
+| `pipelines/` | 编排 | 数学计算 |
 | `visualization/` | 画图 | 任何计算 |
-| `schema/`（规划） | 数据形状、枚举、Protocol | 业务逻辑 |
+| `cli/` | 命令行入口，每个 ≤50 行 | 业务逻辑 |
+
+`tools/` 放一次性脚本与分析工具，`matlab/` 放 MATLAB 仿真，都不属于运行时包。
 
 ## 分工
 

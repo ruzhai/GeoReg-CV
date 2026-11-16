@@ -14,6 +14,8 @@ from pathlib import Path
 import torch
 from torchvision.models import MobileNet_V3_Large_Weights, mobilenet_v3_large
 
+from crossview.paths import experiments_dir
+
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
@@ -23,7 +25,10 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--warmup", type=int, default=20)
     p.add_argument("--iterations", type=int, default=100)
     p.add_argument("--no-pretrained", action="store_true", help="Do not download ImageNet weights.")
-    p.add_argument("--output", default="D:/GeoReg-CV/experiments/lightweight_backbone/mobilenetv3_large/benchmark.json")
+    p.add_argument(
+        "--output",
+        default=experiments_dir() / "lightweight_backbone" / "mobilenetv3_large" / "benchmark.json",
+    )
     return p.parse_args()
 
 

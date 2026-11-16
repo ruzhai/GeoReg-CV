@@ -13,6 +13,9 @@ dependencies = [
     "PyYAML>=6",
 ]
 
+[project.scripts]
+crossview-info = "crossview.cli.info:main"
+
 [project.optional-dependencies]
 viz = ["opencv-python>=4.8", "pillow>=10", "matplotlib>=3.7"]
 dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.6", "mypy>=1.8"]

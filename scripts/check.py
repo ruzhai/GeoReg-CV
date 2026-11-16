@@ -31,9 +31,10 @@ def main() -> int:
     args = parser.parse_args()
 
     py = sys.executable
+    targets = ["src", "tests", "scripts", "tools"]
     checks = [
-        ("ruff check", [py, "-m", "ruff", "check", "src", "tests"]),
-        ("ruff format", [py, "-m", "ruff", "format", "--check", "src", "tests"]),
+        ("ruff check", [py, "-m", "ruff", "check", *targets]),
+        ("ruff format", [py, "-m", "ruff", "format", "--check", *targets]),
     ]
     if not args.fast:
         checks.append(("mypy", [py, "-m", "mypy"]))

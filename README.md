@@ -1,104 +1,97 @@
-# GeoReg-CV
+# CrossView
 
-面向观察者视角与无人机/航拍参考视角协同感知的跨平台空间配准工程。
+跨视角协同感知：把空中平台与地面终端在不同时刻、不同视角拍到的图像，对齐到同一时空坐标，
+输出可比较的目标位置。
 
-本工程当前阶段以 AnyVisLoc 作为 baseline 与数据来源，但研究对象不等同于 AnyVisLoc 官方工程本身。这里的目标是把任务明确抽象为：
+技术路线分三条线，共享一套数据契约：
+
+| 线 | 解决的问题 | 目录 |
+|---|---|---|
+| 时间对齐 | 异步链路导致多源数据时序错位、丢帧 | `src/crossview/core/timealign/` |
+| 空间配准 | 60°–90° 视角差与跨模态辐射差异导致匹配失效 | `src/crossview/core/geometry/`、`core/routing/` |
+| 轻量化重识别 | 边缘算力受限下的跨视角目标关联 | `src/crossview/adaptors/backbones/` |
+
+## 当前状态
+
+| 能力 | 状态 |
+|---|---|
+| 契约层（schema / 配置 / 序列化） | 可用，有测试 |
+| CDA-FastReg 置信度驱动路由 | 可用，有测试 |
+| 在线单样本配准（检索 → 匹配 → 定位） | 代码已迁入，需数据集运行 |
+| 批量跑分与结果汇总 | 同上 |
+| 可视化与仿真数据导出 | 同上 |
+| 时间对齐（研究内容一） | 未开始 |
+| 轻量化跨视角重识别（研究内容三） | 未开始 |
+| golden 夹具 | 待冻结，见 `tests/fixtures/README.md` |
+| CI（lint + 类型 + 契约测试） | 已配置 |
+
+## 快速开始
+
+```bash
+git clone git@github.com:ruzhai/GeoReg-CV.git
+cd GeoReg-CV
+
+python -m venv .venv --system-site-packages
+source .venv/Scripts/activate        # Git Bash；PowerShell 用 .venv\Scripts\Activate.ps1
+pip install -e ".[dev]"
+
+crossview-info                       # 自检：版本、包路径、已注册组件
+python scripts/check.py              # lint + 类型 + 测试
+```
+
+`scripts/check.py` 不绿就不要开始写代码。见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+## 目录
 
 ```text
-Observer-view image
-    ↓
-Reference-view retrieval
-    ↓
-Cross-view feature matching
-    ↓
-Geometry-guided registration
-    ↓
-Geo-position estimation
+src/crossview/
+├── schema/       契约：records / samples / configs / enums / interfaces / serialization
+├── core/         纯计算，不读文件、不依赖框架
+│   ├── geometry/   单应、PnP、拓扑约束
+│   ├── routing/    置信度路由与结果构建
+│   ├── metrics/    指标统计
+│   └── timealign/  时间对齐（规划）
+├── imaging/      需要图像库的算法（允许 cv2，但不做文件 IO）
+├── adaptors/     外部世界的封装
+│   ├── datasets/   数据集适配
+│   ├── matchers/   匹配器（含新方法模板）
+│   ├── retrievers/ 检索器
+│   ├── backbones/  轻量骨干
+│   └── io/         结果读写、产物落盘、仿真导出
+├── pipelines/    编排层
+├── visualization/画图
+└── cli/          命令行入口
 ```
 
-## 当前工程定位
+脚本类工具放 `tools/`，MATLAB 仿真放 `matlab/`。
 
-- `observer_view`：观察者/低空斜视图像，可由 AnyVisLoc 的低空 UAV oblique query 图像近似。
-- `reference_view`：无人机/航拍/正射参考视图，可由 AnyVisLoc 的 aerial map / orthophoto reference 表示。
-- `geo_position`：最终输出的空间位置或相机位姿。
-- `AnyVisLoc baseline`：作为第一组几何配准 baseline，用于复现、分析与后续改进。
+## 跑一次配准
 
-## 推荐数据与官方工程路径
+需要数据集和权重，见 [data/README.md](data/README.md)。
 
-默认假设本机已有：
+```bash
+export CROSSVIEW_DATA_ROOT="D:/GD/Benchmark"
 
-```text
-D:/GD/Benchmark
-D:/GD/Benchmark/Data/AnyVisLoc
-D:/GD/Benchmark/weights
+python -m crossview.pipelines.run_online_cda_sample --help
+python -m crossview.pipelines.run_online_cda_sample \
+    --scene Scene_01 --sample-id L01_0001 \
+    --config configs/anyvisloc_baseline.yaml
 ```
 
-本工程不会复制大体量数据和权重，只在配置中引用它们。
+批量：
 
-## 第一阶段目标
-
-1. 用本工程入口调用 AnyVisLoc baseline；
-2. 固化 Scene_01 / limit=20 的 baseline 结果；
-3. 分析成功/失败样本、耗时瓶颈；
-4. 在 baseline 上加入几何先验引导的候选重排序与一致性验证。
-
-## 当前系统级命令
-
-基于已固化的 Scene_01 full baseline 结果，生成课题系统需要的位置输出、可视化与仿真数据：
-
-```powershell
-cd /d D:\GeoReg-CV
-python .\pipelines\run_system_demo.py
+```bash
+python -m crossview.pipelines.run_online_cda_batch --scene Scene_01 --limit 20
 ```
 
-输出目录：
+单次运行会在 `outputs/online_cda/<scene>/<sample>/<时间戳>/` 下产出一份完整记录，
+`outputs/` 不进 git。
 
-```text
-D:/GeoReg-CV/outputs/scene01_system_demo
-```
+## 协作
 
-该命令不会重新跑模型，只会把 baseline 的结果转化为完整系统交付物。
+- 工程约定：[AGENTS.md](AGENTS.md)（给 AI 与评审）、[CONTRIBUTING.md](CONTRIBUTING.md)（给人）
+- 契约说明：`docs/contracts/`
+- 设计文档：`docs/design-docs/`
+- 实验卡：`experiments/_template/card.yaml`
 
-生成成功/失败样本可视化图：
-
-```powershell
-cd /d D:\GeoReg-CV
-python .\pipelines\generate_sample_visualizations.py
-```
-
-输出目录：
-
-```text
-D:/GeoReg-CV/outputs/scene01_sample_visualizations
-```
-
-导出 CDA-FastReg 方法报告、实验表和流程图：
-
-```powershell
-cd /d D:\GeoReg-CV
-python .\tools\simulate_adaptive_strategy.py
-python .\tools\export_adaptive_method_artifacts.py
-```
-
-关键输出：
-
-```text
-D:/GeoReg-CV/experiments/fast_baseline_ablation/adaptive_method_artifacts
-D:/GeoReg-CV/docs/cda_fastreg_method_report.md
-D:/GeoReg-CV/docs/figures/cda_fastreg_flow.svg
-```
-
-生成带自适应路径信息的系统演示与可视化：
-
-```powershell
-cd /d D:\GeoReg-CV
-python .\pipelines\run_adaptive_system_demo.py
-python .\pipelines\generate_adaptive_visualizations.py
-```
-
-关键输出：
-
-```text
-D:/GeoReg-CV/outputs/scene01_cda_fastreg_demo
-D:/GeoReg-CV/outputs/scene01_cda_fastreg_visualizations
-```
+三条硬规则：**跨模块传数据必须用契约**、**路径不许写死**、**测试不许为了通过而放宽**。

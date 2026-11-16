@@ -11,7 +11,9 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-from crossview.pipelines.run_online_cda_sample import TeeStream, _run, _save_outputs
+from crossview.adaptors.io.artifacts import TeeStream, save_outputs
+from crossview.paths import configs_dir, outputs_dir
+from crossview.pipelines.run_online_cda_sample import _run
 
 
 def parse_args() -> argparse.Namespace:
@@ -19,8 +21,8 @@ def parse_args() -> argparse.Namespace:
         description="Run online CDA-FastReg for many samples in one Python process."
     )
     parser.add_argument("--scene", required=True)
-    parser.add_argument("--config", default="D:/GeoReg-CV/configs/anyvisloc_baseline.yaml")
-    parser.add_argument("--output-root", default="D:/GeoReg-CV/outputs/online_cda_batch")
+    parser.add_argument("--config", default=configs_dir() / "anyvisloc_baseline.yaml")
+    parser.add_argument("--output-root", default=outputs_dir() / "online_cda_batch")
     parser.add_argument(
         "--limit", type=int, default=120, help="Number of sorted samples; 0 means all."
     )
@@ -121,7 +123,7 @@ def main() -> None:
                 try:
                     payload = _run(sample_args, run_dir)
                     payload["artifacts"]["log"] = str(log_path)
-                    _save_outputs(run_dir, payload)
+                    save_outputs(run_dir, payload)
                     records.append(payload)
                     route = payload["adaptive_strategy"]["route"]
                     center_error = payload.get("experimental_center_estimation", {}).get(

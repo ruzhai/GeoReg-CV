@@ -6,6 +6,7 @@ from crossview.adaptors.io.results import save_records_csv, save_records_json
 from crossview.adaptors.io.simulation import export_simulation_json
 from crossview.core.metrics.selection import select_demo_records
 from crossview.core.routing.builder import build_adaptive_records, summarize_adaptive_records
+from crossview.paths import experiments_dir, outputs_dir
 from crossview.visualization.svg_map import render_position_svg
 
 
@@ -26,17 +27,19 @@ def main() -> None:
     parser.add_argument("--fallback-topk", type=int, default=2, choices=[2, 5])
     parser.add_argument(
         "--top1-root",
-        default=r"D:\GeoReg-CV\experiments\fast_baseline_ablation\fast_v2_top1_k1500_r03_limit120",
+        default=experiments_dir() / "fast_baseline_ablation" / "fast_v2_top1_k1500_r03_limit120",
     )
     parser.add_argument(
         "--top2-root",
-        default=r"D:\GeoReg-CV\experiments\fast_baseline_ablation\fast_v3_true_top2_k1500_r03_limit120",
+        default=experiments_dir()
+        / "fast_baseline_ablation"
+        / "fast_v3_true_top2_k1500_r03_limit120",
     )
     parser.add_argument(
         "--top5-root",
-        default=r"D:\GeoReg-CV\experiments\fast_baseline_ablation\standard_top5_k3000_r04_limit120",
+        default=experiments_dir() / "fast_baseline_ablation" / "standard_top5_k3000_r04_limit120",
     )
-    parser.add_argument("--output", default=r"D:\GeoReg-CV\outputs\scene01_cda_fastreg_demo")
+    parser.add_argument("--output", default=outputs_dir() / "scene01_cda_fastreg_demo")
     args = parser.parse_args()
 
     top1_csv = find_latest_result_csv(Path(args.top1_root))

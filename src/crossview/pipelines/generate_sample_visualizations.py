@@ -1,6 +1,7 @@
 import argparse
 from pathlib import Path
 
+from crossview.paths import data_root, experiments_dir, outputs_dir
 from crossview.visualization.sample_panel import render_from_selection
 
 
@@ -10,22 +11,24 @@ def main() -> None:
     )
     parser.add_argument(
         "--archive",
-        default=r"D:\GeoReg-CV\experiments\baseline_anyvisloc_scene01\frozen_scene01_full_baseline_20260809-2323",
+        default=experiments_dir()
+        / "baseline_anyvisloc_scene01"
+        / "frozen_scene01_full_baseline_20260809-2323",
         help="Frozen baseline archive directory containing all_results.csv.",
     )
     parser.add_argument(
         "--selection",
-        default=r"D:\GeoReg-CV\outputs\scene01_system_demo\system_demo_summary.json",
+        default=outputs_dir() / "scene01_system_demo" / "system_demo_summary.json",
         help="System demo summary containing selected sample IDs.",
     )
     parser.add_argument(
         "--dataset-root",
-        default=r"D:\GD\Benchmark\Data\AnyVisLoc",
+        default=data_root() / "Data" / "AnyVisLoc",
         help="AnyVisLoc dataset root.",
     )
     parser.add_argument(
         "--output",
-        default=r"D:\GeoReg-CV\outputs\scene01_sample_visualizations",
+        default=outputs_dir() / "scene01_sample_visualizations",
         help="Output directory.",
     )
     args = parser.parse_args()

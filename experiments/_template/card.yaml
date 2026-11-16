@@ -1,0 +1,25 @@
+# 复制本文件到 experiments/<实验ID>/card.yaml 后填写。
+# 只提交 card.yaml 和 summary.json；pkl/png 等产物留在本地。
+id: 20260101-示例实验
+owner: 待填
+date: 2026-01-01
+commit: 待填            # git rev-parse --short HEAD
+config: configs/experiments/待填.yaml
+
+dataset:
+  name: anyvisloc
+  scene: Scene_01
+  samples: 0
+
+metrics:
+  success_5m: 0.0
+  mean_error_m: 0.0
+  median_error_m: 0.0
+  mean_time_s: 0.0
+
+conclusion: >
+  一句话结论：相对什么 baseline，好了多少或差了多少，可能的原因是什么。
+
+artifacts:
+  # 产物留在本地，这里只写路径，便于以后找回
+  output_dir: experiments/20260101-示例实验/

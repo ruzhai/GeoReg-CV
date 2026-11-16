@@ -5,13 +5,18 @@
 ## 开始之前
 
 ```bash
-git clone <repo>
-cd crossview
-make setup
-make check      # 应该全绿
+git clone git@github.com:ruzhai/GeoReg-CV.git
+cd GeoReg-CV
+
+python -m venv .venv --system-site-packages
+source .venv/Scripts/activate        # Git Bash
+pip install -e ".[dev]"
+
+crossview-info                       # 自检
+python scripts/check.py              # 应该全绿
 ```
 
-`make check` 不绿就先别写代码，找负责人，不要自己想办法绕过。
+`python scripts/check.py` 不绿就先别写代码，找负责人，不要自己想办法绕过。
 
 ## 动手前先确认它放在哪
 
@@ -34,7 +39,7 @@ make check      # 应该全绿
 2. 在 `registry.py` 加一行注册
 3. 在 `configs/experiments/` 复制一份 yaml，把 `name` 改成你的
 4. 加测试 `tests/adaptors/test_<你的名字>.py`，至少一个成功、一个失败
-5. 跑 `make check`
+5. 跑 `python scripts/check.py`
 6. 跑一次实验，复制 `experiments/_template/card.yaml` 填好
 
 **判据：如果你的方法必须改代码才能启用，说明接错了地方。**
@@ -59,7 +64,7 @@ PR 标题    给候选重排加入内点权重
 PR 描述    对应 issue #12
            改了什么：……
            影响契约：无 / 改了 schema（已升 1.1）
-           跑过：make check 全绿；Scene_01 前 20 个样本
+           跑过：python scripts/check.py 全绿；Scene_01 前 20 个样本
 ```
 
 用中文写。三个人都看得快，英文只会让你写得更含糊。

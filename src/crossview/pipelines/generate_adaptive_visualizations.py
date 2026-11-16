@@ -2,6 +2,7 @@ import argparse
 import csv
 from pathlib import Path
 
+from crossview.paths import data_root, outputs_dir
 from crossview.visualization.sample_panel import render_sample_panel
 
 
@@ -16,12 +17,10 @@ def main() -> None:
     )
     parser.add_argument(
         "--input",
-        default=r"D:\GeoReg-CV\outputs\scene01_cda_fastreg_demo\scene01_cda_demo_geo_positions.csv",
+        default=outputs_dir() / "scene01_cda_fastreg_demo" / "scene01_cda_demo_geo_positions.csv",
     )
-    parser.add_argument("--dataset-root", default=r"D:\GD\Benchmark\Data\AnyVisLoc")
-    parser.add_argument(
-        "--output", default=r"D:\GeoReg-CV\outputs\scene01_cda_fastreg_visualizations"
-    )
+    parser.add_argument("--dataset-root", default=data_root() / "Data" / "AnyVisLoc")
+    parser.add_argument("--output", default=outputs_dir() / "scene01_cda_fastreg_visualizations")
     args = parser.parse_args()
 
     rows = read_csv(Path(args.input))

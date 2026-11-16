@@ -1,0 +1,68 @@
+{
+  "additionalProperties": false,
+  "description": "观察者/低空斜视图像，可带姿态先验。",
+  "properties": {
+    "image_path": {
+      "anyOf": [
+        {
+          "format": "path",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Image Path"
+    },
+    "source_path": {
+      "format": "path",
+      "title": "Source Path",
+      "type": "string"
+    },
+    "yaw_pitch": {
+      "anyOf": [
+        {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Yaw Pitch"
+    },
+    "height": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Height"
+    },
+    "note": {
+      "default": "",
+      "title": "Note",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_path"
+  ],
+  "title": "ObserverView",
+  "type": "object"
+}

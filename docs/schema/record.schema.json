@@ -1,0 +1,221 @@
+{
+  "additionalProperties": false,
+  "description": "观察者视角到参考视角的一次配准结果。\n\n字段与旧 `system.result_schema.GeoRegistrationRecord` 保持兼容，\n新增了版本号、坐标系、单位与结构化失败原因。",
+  "properties": {
+    "schema_version": {
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "frame": {
+      "default": "local_enu",
+      "title": "Frame",
+      "type": "string"
+    },
+    "unit": {
+      "default": "m",
+      "title": "Unit",
+      "type": "string"
+    },
+    "failure": {
+      "default": "none",
+      "title": "Failure",
+      "type": "string"
+    },
+    "scene_name": {
+      "title": "Scene Name",
+      "type": "string"
+    },
+    "sample_id": {
+      "title": "Sample Id",
+      "type": "string"
+    },
+    "observer_source": {
+      "title": "Observer Source",
+      "type": "string"
+    },
+    "reference_source": {
+      "title": "Reference Source",
+      "type": "string"
+    },
+    "gt_x": {
+      "title": "Gt X",
+      "type": "number"
+    },
+    "gt_y": {
+      "title": "Gt Y",
+      "type": "number"
+    },
+    "gt_z": {
+      "default": 0.0,
+      "title": "Gt Z",
+      "type": "number"
+    },
+    "pred_x": {
+      "title": "Pred X",
+      "type": "number"
+    },
+    "pred_y": {
+      "title": "Pred Y",
+      "type": "number"
+    },
+    "pred_z": {
+      "default": 0.0,
+      "title": "Pred Z",
+      "type": "number"
+    },
+    "error_m": {
+      "title": "Error M",
+      "type": "number"
+    },
+    "success_1m": {
+      "default": false,
+      "title": "Success 1M",
+      "type": "boolean"
+    },
+    "success_3m": {
+      "default": false,
+      "title": "Success 3M",
+      "type": "boolean"
+    },
+    "success_5m": {
+      "default": false,
+      "title": "Success 5M",
+      "type": "boolean"
+    },
+    "retrieval_method": {
+      "default": "",
+      "title": "Retrieval Method",
+      "type": "string"
+    },
+    "matching_method": {
+      "default": "",
+      "title": "Matching Method",
+      "type": "string"
+    },
+    "localization_method": {
+      "default": "",
+      "title": "Localization Method",
+      "type": "string"
+    },
+    "retrieval_gt_rank": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Retrieval Gt Rank"
+    },
+    "recall_at_k": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Recall At K"
+    },
+    "pdm_at_k": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Pdm At K"
+    },
+    "best_inliers": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Best Inliers"
+    },
+    "total_time_s": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Total Time S"
+    },
+    "adaptive_route": {
+      "default": "",
+      "title": "Adaptive Route",
+      "type": "string"
+    },
+    "top1_best_inliers": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Top1 Best Inliers"
+    },
+    "confidence_threshold": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Confidence Threshold"
+    },
+    "fallback_used": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Fallback Used"
+    },
+    "source_method": {
+      "default": "",
+      "title": "Source Method",
+      "type": "string"
+    }
+  },
+  "required": [
+    "scene_name",
+    "sample_id",
+    "observer_source",
+    "reference_source",
+    "gt_x",
+    "gt_y",
+    "pred_x",
+    "pred_y",
+    "error_m"
+  ],
+  "title": "GeoRegistrationRecord",
+  "type": "object"
+}

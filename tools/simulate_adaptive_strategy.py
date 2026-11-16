@@ -3,10 +3,10 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean, median
-from typing import Dict, List, Tuple
 
+from crossview.paths import experiments_dir
 
-ROOT = Path(r"D:\GeoReg-CV\experiments\fast_baseline_ablation")
+ROOT = Path(experiments_dir() / "fast_baseline_ablation")
 OUTPUT_DIR = ROOT / "adaptive_strategy_simulation"
 
 RUNS = {
@@ -54,13 +54,17 @@ def _int(value, default=0) -> int:
 
 
 def find_method_dir(run_root: Path) -> Path:
-    candidates = sorted(run_root.glob("*_1scenes/aerial/aerial-CAMP-Roma-yp"), key=lambda p: p.stat().st_mtime, reverse=True)
+    candidates = sorted(
+        run_root.glob("*_1scenes/aerial/aerial-CAMP-Roma-yp"),
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
+    )
     if not candidates:
         raise FileNotFoundError(f"No method result directory found under {run_root}")
     return candidates[0]
 
 
-def load_rows(run_root: Path) -> Dict[str, dict]:
+def load_rows(run_root: Path) -> dict[str, dict]:
     method_dir = find_method_dir(run_root)
     csv_path = method_dir / "all_results.csv"
     with csv_path.open("r", encoding="utf-8-sig", newline="") as f:
@@ -68,7 +72,13 @@ def load_rows(run_root: Path) -> Dict[str, dict]:
     return {r["sample_id"]: r for r in rows}
 
 
-def summarize_rows(name: str, rows: List[dict], standard_mean_time: float, standard_median_time: float, fallback_count=0) -> dict:
+def summarize_rows(
+    name: str,
+    rows: list[dict],
+    standard_mean_time: float,
+    standard_median_time: float,
+    fallback_count=0,
+) -> dict:
     errors = [_float(r["pred_error_m"]) for r in rows]
     times = [_float(r["total_time"]) for r in rows]
     n = len(rows)
@@ -88,13 +98,15 @@ def summarize_rows(name: str, rows: List[dict], standard_mean_time: float, stand
         "mean_time_s": round(mean(times), 6),
         "median_time_s": round(median(times), 6),
         "mean_speedup_vs_standard": round(standard_mean_time / mean(times), 6) if times else 0,
-        "median_speedup_vs_standard": round(standard_median_time / median(times), 6) if times else 0,
+        "median_speedup_vs_standard": round(standard_median_time / median(times), 6)
+        if times
+        else 0,
         "fallback_count": fallback_count,
         "fallback_pct": round(fallback_count / n * 100, 4) if n else 0,
     }
 
 
-def save_csv(path: Path, rows: List[dict]) -> None:
+def save_csv(path: Path, rows: list[dict]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     if not rows:
         return
@@ -118,9 +130,15 @@ def main() -> None:
     standard_median_time = median([_float(r["total_time"]) for r in standard_rows])
 
     summaries = []
-    summaries.append(summarize_rows("Standard_Top5", standard_rows, standard_mean_time, standard_median_time))
-    summaries.append(summarize_rows("Fixed_Top2", top2_rows, standard_mean_time, standard_median_time))
-    summaries.append(summarize_rows("Fixed_Top1", top1_rows, standard_mean_time, standard_median_time))
+    summaries.append(
+        summarize_rows("Standard_Top5", standard_rows, standard_mean_time, standard_median_time)
+    )
+    summaries.append(
+        summarize_rows("Fixed_Top2", top2_rows, standard_mean_time, standard_median_time)
+    )
+    summaries.append(
+        summarize_rows("Fixed_Top1", top1_rows, standard_mean_time, standard_median_time)
+    )
 
     all_decisions = []
     for strategy in STRATEGIES:
@@ -152,7 +170,11 @@ def main() -> None:
                     "standard_error_m": _float(loaded["standard_top5"][sid]["pred_error_m"]),
                 }
             )
-        summaries.append(summarize_rows(strategy.name, chosen_rows, standard_mean_time, standard_median_time, fallback_count))
+        summaries.append(
+            summarize_rows(
+                strategy.name, chosen_rows, standard_mean_time, standard_median_time, fallback_count
+            )
+        )
         all_decisions.extend(decisions)
 
     save_csv(OUTPUT_DIR / "adaptive_strategy_summary.csv", summaries)
@@ -160,8 +182,14 @@ def main() -> None:
     with (OUTPUT_DIR / "adaptive_strategy_summary.json").open("w", encoding="utf-8-sig") as f:
         json.dump(summaries, f, ensure_ascii=False, indent=2)
 
-    best_success5 = sorted(summaries, key=lambda r: (-r["success_5m_pct"], -r["mean_speedup_vs_standard"], r["mean_error_m"]))[:5]
-    best_speed = sorted(summaries, key=lambda r: (-r["mean_speedup_vs_standard"], -r["success_5m_pct"], r["mean_error_m"]))[:5]
+    best_success5 = sorted(
+        summaries,
+        key=lambda r: (-r["success_5m_pct"], -r["mean_speedup_vs_standard"], r["mean_error_m"]),
+    )[:5]
+    best_speed = sorted(
+        summaries,
+        key=lambda r: (-r["mean_speedup_vs_standard"], -r["success_5m_pct"], r["mean_error_m"]),
+    )[:5]
 
     def md_table(rows):
         lines = [

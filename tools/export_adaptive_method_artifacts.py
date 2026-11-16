@@ -2,10 +2,11 @@ import csv
 import json
 from pathlib import Path
 
+from crossview.paths import docs_dir, experiments_dir
 
-SIM_DIR = Path(r"D:\GeoReg-CV\experiments\fast_baseline_ablation\adaptive_strategy_simulation")
-OUT_DIR = Path(r"D:\GeoReg-CV\experiments\fast_baseline_ablation\adaptive_method_artifacts")
-DOCS_DIR = Path(r"D:\GeoReg-CV\docs")
+SIM_DIR = Path(experiments_dir() / "fast_baseline_ablation" / "adaptive_strategy_simulation")
+OUT_DIR = Path(experiments_dir() / "fast_baseline_ablation" / "adaptive_method_artifacts")
+DOCS_DIR = Path(docs_dir())
 FIG_DIR = DOCS_DIR / "figures"
 
 
@@ -202,12 +203,12 @@ fallback = Top2
 
 `Adaptive_T1000_else_Top2`：
 
-- Success@5m：{float(best['success_5m_pct']):.2f}%
-- Mean Error：{float(best['mean_error_m']):.2f} m
-- Median Error：{float(best['median_error_m']):.3f} m
-- Mean Time：{float(best['mean_time_s']):.2f} s
-- Speedup：{float(best['mean_speedup_vs_standard']):.2f}×
-- Fallback Ratio：{float(best['fallback_pct']):.2f}%
+- Success@5m：{float(best["success_5m_pct"]):.2f}%
+- Mean Error：{float(best["mean_error_m"]):.2f} m
+- Median Error：{float(best["median_error_m"]):.3f} m
+- Mean Time：{float(best["mean_time_s"]):.2f} s
+- Speedup：{float(best["mean_speedup_vs_standard"]):.2f}×
+- Fallback Ratio：{float(best["fallback_pct"]):.2f}%
 
 ## 论文表述建议
 
@@ -217,7 +218,7 @@ fallback = Top2
 
 - 实验表：`{table_csv}`
 - 方法流程图：`{flow_svg}`
-- 原始模拟结果：`{SIM_DIR / 'adaptive_strategy_summary.csv'}`
+- 原始模拟结果：`{SIM_DIR / "adaptive_strategy_summary.csv"}`
 """
     report_path = OUT_DIR / "cda_fastreg_method_report.md"
     report_path.write_text(report, encoding="utf-8-sig")
@@ -231,7 +232,9 @@ fallback = Top2
         "flow_svg": str(flow_svg),
         "source_summary": str(summary_path),
     }
-    (OUT_DIR / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8-sig")
+    (OUT_DIR / "manifest.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8-sig"
+    )
 
     print(f"Report: {report_path}")
     print(f"Docs copy: {DOCS_DIR / 'cda_fastreg_method_report.md'}")
@@ -241,4 +244,3 @@ fallback = Top2
 
 if __name__ == "__main__":
     main()
-

@@ -1,0 +1,34 @@
+{
+  "additionalProperties": false,
+  "description": "无人机/航拍/正射参考视图。",
+  "properties": {
+    "map_path": {
+      "format": "path",
+      "title": "Map Path",
+      "type": "string"
+    },
+    "dsm_path": {
+      "anyOf": [
+        {
+          "format": "path",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Dsm Path"
+    },
+    "coordinate_system": {
+      "default": "",
+      "title": "Coordinate System",
+      "type": "string"
+    }
+  },
+  "required": [
+    "map_path"
+  ],
+  "title": "ReferenceView",
+  "type": "object"
+}

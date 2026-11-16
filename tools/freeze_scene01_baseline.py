@@ -5,16 +5,17 @@ from datetime import datetime
 from pathlib import Path
 from statistics import mean, median
 
+from crossview.paths import docs_dir, experiments_dir
 
 SOURCE_DIR = Path(
-    r"D:\GeoReg-CV\experiments\baseline_anyvisloc_scene01"
+    experiments_dir() / "baseline_anyvisloc_scene01"
     r"\20260809-2323_1scenes\aerial\aerial-CAMP-Roma-yp"
 )
 ARCHIVE_DIR = Path(
-    r"D:\GeoReg-CV\experiments\baseline_anyvisloc_scene01"
+    experiments_dir() / "baseline_anyvisloc_scene01"
     r"\frozen_scene01_full_baseline_20260809-2323"
 )
-DOCS_DIR = Path(r"D:\GeoReg-CV\docs")
+DOCS_DIR = Path(docs_dir())
 
 
 def read_json(path: Path):
@@ -197,10 +198,6 @@ def main() -> None:
 
     over_5 = count_if(errors, lambda e: e > 5)
     over_20 = count_if(errors, lambda e: e > 20)
-    retrieval_miss_top5 = sum(1 for r in rows if as_float(r, "recall_at_k") < 1)
-    large_error_retrieval_hit = sum(
-        1 for r in rows if as_float(r, "pred_error_m") > 5 and as_float(r, "recall_at_k") >= 1
-    )
 
     high_error_md_rows = "\n".join(
         [
@@ -229,7 +226,7 @@ def main() -> None:
 - Baseline：CAMP + RoMa + P3P
 - 参考视角：aerial
 - 位姿先验：yaw / pitch，配置中记为 `yp`
-- 样本数：{metrics['num_samples']}
+- 样本数：{metrics["num_samples"]}
 - 结果来源：`{SOURCE_DIR}`
 - 固化目录：`{ARCHIVE_DIR}`
 
@@ -237,12 +234,12 @@ def main() -> None:
 
 | 项目 | 数值 |
 | --- | ---: |
-| 请求样本数 | {summary.get('num_samples_requested')} |
-| 实际结果数 | {summary.get('num_result_rows')} |
-| PnP 成功数 | {summary.get('num_pnp_success_rows')} |
-| PnP 失败数 | {summary.get('num_pnp_failed_rows')} |
-| 异常失败数 | {summary.get('num_exception_failed_rows')} |
-| failure rate | {metrics['failure_rate']:.4f} |
+| 请求样本数 | {summary.get("num_samples_requested")} |
+| 实际结果数 | {summary.get("num_result_rows")} |
+| PnP 成功数 | {summary.get("num_pnp_success_rows")} |
+| PnP 失败数 | {summary.get("num_pnp_failed_rows")} |
+| 异常失败数 | {summary.get("num_exception_failed_rows")} |
+| failure rate | {metrics["failure_rate"]:.4f} |
 
 结论：本次 Scene_01 full baseline 已完整运行，未出现异常失败或 PnP 失败。
 
@@ -250,18 +247,18 @@ def main() -> None:
 
 | 指标 | 数值 |
 | --- | ---: |
-| Mean Error | {metrics['mean_error_m']:.4f} m |
-| Median Error | {metrics['median_error_m']:.4f} m |
-| Max Error | {metrics['max_error_m']:.4f} m |
-| Success@1m | {pct(metrics['success_rate_1m'])} |
-| Success@3m | {pct(metrics['success_rate_3m'])} |
-| Success@5m | {pct(metrics['success_rate_5m'])} |
-| Success@10m | {pct(metrics['success_rate_10m'])} |
-| Success@20m | {pct(metrics['success_rate_20m'])} |
-| Recall@5 | {pct(metrics['Recall@5'])} |
-| PDM@5 | {metrics['PDM@5']:.4f} |
+| Mean Error | {metrics["mean_error_m"]:.4f} m |
+| Median Error | {metrics["median_error_m"]:.4f} m |
+| Max Error | {metrics["max_error_m"]:.4f} m |
+| Success@1m | {pct(metrics["success_rate_1m"])} |
+| Success@3m | {pct(metrics["success_rate_3m"])} |
+| Success@5m | {pct(metrics["success_rate_5m"])} |
+| Success@10m | {pct(metrics["success_rate_10m"])} |
+| Success@20m | {pct(metrics["success_rate_20m"])} |
+| Recall@5 | {pct(metrics["Recall@5"])} |
+| PDM@5 | {metrics["PDM@5"]:.4f} |
 
-核心观察：中位误差只有 {metrics['median_error_m']:.4f} m，说明大多数样本定位较准；但平均误差达到 {metrics['mean_error_m']:.4f} m，主要被少数极端大误差样本拉高。
+核心观察：中位误差只有 {metrics["median_error_m"]:.4f} m，说明大多数样本定位较准；但平均误差达到 {metrics["mean_error_m"]:.4f} m，主要被少数极端大误差样本拉高。
 
 ## 4. 误差分布
 
@@ -283,10 +280,10 @@ def main() -> None:
 
 | 指标 | 数值 |
 | --- | ---: |
-| 平均总耗时/样本 | {metrics['mean_total_time_s']:.4f} s |
-| 中位总耗时/样本 | {metrics['median_total_time_s']:.4f} s |
-| 平均检索耗时/样本 | {metrics['mean_retrieval_time_s']:.6f} s |
-| 中位检索耗时/样本 | {metrics['median_retrieval_time_s']:.6f} s |
+| 平均总耗时/样本 | {metrics["mean_total_time_s"]:.4f} s |
+| 中位总耗时/样本 | {metrics["median_total_time_s"]:.4f} s |
+| 平均检索耗时/样本 | {metrics["mean_retrieval_time_s"]:.6f} s |
+| 中位检索耗时/样本 | {metrics["median_retrieval_time_s"]:.6f} s |
 
 检索耗时远小于单样本总耗时，说明当前系统主要耗时不在图像检索，而在后续候选区域处理、跨视角匹配和几何定位流程。
 
@@ -321,21 +318,23 @@ def main() -> None:
 This directory freezes the completed AnyVisLoc Scene_01 full baseline run.
 
 - Source: `{SOURCE_DIR}`
-- Frozen at: {metrics['frozen_at']}
-- Samples: {metrics['num_samples']}
-- Method: {metrics['method']}
-- Mean error: {metrics['mean_error_m']:.4f} m
-- Median error: {metrics['median_error_m']:.4f} m
-- Success@1m: {pct(metrics['success_rate_1m'])}
-- Success@5m: {pct(metrics['success_rate_5m'])}
-- Recall@5: {pct(metrics['Recall@5'])}
-- PDM@5: {metrics['PDM@5']:.4f}
+- Frozen at: {metrics["frozen_at"]}
+- Samples: {metrics["num_samples"]}
+- Method: {metrics["method"]}
+- Mean error: {metrics["mean_error_m"]:.4f} m
+- Median error: {metrics["median_error_m"]:.4f} m
+- Success@1m: {pct(metrics["success_rate_1m"])}
+- Success@5m: {pct(metrics["success_rate_5m"])}
+- Recall@5: {pct(metrics["Recall@5"])}
+- PDM@5: {metrics["PDM@5"]:.4f}
 
 See `scene01_baseline_analysis_report.md` for the full analysis.
 """
     (ARCHIVE_DIR / "README.md").write_text(readme, encoding="utf-8-sig")
 
-    latest = Path(r"D:\GeoReg-CV\experiments\baseline_anyvisloc_scene01\LATEST_SCENE01_FULL_BASELINE.txt")
+    latest = Path(
+        experiments_dir() / "baseline_anyvisloc_scene01" / "LATEST_SCENE01_FULL_BASELINE.txt"
+    )
     latest.write_text(
         f"source_dir={SOURCE_DIR}\narchive_dir={ARCHIVE_DIR}\nreport={report_path}\n",
         encoding="utf-8-sig",

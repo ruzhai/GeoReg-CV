@@ -1,12 +1,11 @@
-from pathlib import Path
-
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt
 
+from crossview.paths import data_root, docs_dir, experiments_dir, outputs_dir, project_root
 
-OUTPUT = Path(r"C:\Users\V\Desktop\GeoReg-CV课题周报_方向更新后阶段总结_2026-08-15.docx")
+OUTPUT = outputs_dir() / "weekly_reports" / "GeoReg-CV课题周报.docx"
 
 
 def set_run_font(run, size=11, bold=False):
@@ -23,7 +22,7 @@ def add_paragraph(document, text="", bold_prefix=None):
     if bold_prefix and text.startswith(bold_prefix):
         first = paragraph.add_run(bold_prefix)
         set_run_font(first, bold=True)
-        rest = paragraph.add_run(text[len(bold_prefix):])
+        rest = paragraph.add_run(text[len(bold_prefix) :])
         set_run_font(rest)
     else:
         run = paragraph.add_run(text)
@@ -92,7 +91,7 @@ def build_document():
     )
     add_paragraph(
         document,
-        "官方AnyVisLoc工程保留在D:\\GD\\Benchmark，课题工程位于D:\\GeoReg-CV。当前所有新增系统功能均在GeoReg-CV中完成，没有修改官方工程。",
+        "官方AnyVisLoc工程保留在 CROSSVIEW_DATA_ROOT 指向的位置，课题工程位于本仓库。当前所有新增系统功能均在本仓库中完成，没有修改官方工程。",
     )
 
     add_heading(document, "三、已完成工作")
@@ -224,12 +223,15 @@ def build_document():
 
     add_heading(document, "七、主要文件位置")
     locations = [
-        ("课题工程", r"D:\GeoReg-CV"),
-        ("官方AnyVisLoc工程", r"D:\GD\Benchmark"),
-        ("Scene_01全量baseline", r"D:\GeoReg-CV\experiments\baseline_anyvisloc_scene01"),
-        ("在线CDA单样本输出", r"D:\GeoReg-CV\outputs\online_cda"),
-        ("在线单样本入口", r"D:\GeoReg-CV\pipelines\run_online_cda_sample.py"),
-        ("方法与实验文档", r"D:\GeoReg-CV\docs"),
+        ("课题工程", str(project_root())),
+        ("官方AnyVisLoc工程", str(data_root())),
+        ("Scene_01全量baseline", str(experiments_dir() / "baseline_anyvisloc_scene01")),
+        ("在线CDA单样本输出", str(outputs_dir() / "online_cda")),
+        (
+            "在线单样本入口",
+            str(project_root() / "src" / "crossview" / "pipelines" / "run_online_cda_sample.py"),
+        ),
+        ("方法与实验文档", str(docs_dir())),
     ]
     add_table(document, ["内容", "位置"], locations)
     return document

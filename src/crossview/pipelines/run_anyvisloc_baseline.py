@@ -5,6 +5,8 @@ from pathlib import Path
 
 import yaml
 
+from crossview.paths import configs_dir
+
 
 def build_command(config_path: Path) -> tuple[list[str], Path]:
     with config_path.open("r", encoding="utf-8") as f:
@@ -77,7 +79,7 @@ def build_command(config_path: Path) -> tuple[list[str], Path]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run official AnyVisLoc baseline from GeoReg-CV.")
-    parser.add_argument("--config", default="D:/GeoReg-CV/configs/anyvisloc_baseline.yaml")
+    parser.add_argument("--config", default=configs_dir() / "anyvisloc_baseline.yaml")
     parser.add_argument("--dry-run", action="store_true", help="Print command without executing.")
     args = parser.parse_args()
 

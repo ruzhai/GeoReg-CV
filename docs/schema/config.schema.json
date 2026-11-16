@@ -1,0 +1,121 @@
+{
+  "$defs": {
+    "ComponentConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "title": "Params",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "ComponentConfig",
+      "type": "object"
+    },
+    "DataConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "root": {
+          "format": "path",
+          "title": "Root",
+          "type": "string"
+        },
+        "dataset": {
+          "default": "anyvisloc",
+          "title": "Dataset",
+          "type": "string"
+        },
+        "scene": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scene"
+        }
+      },
+      "required": [
+        "root"
+      ],
+      "title": "DataConfig",
+      "type": "object"
+    },
+    "RoutingConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence_threshold": {
+          "default": 1000,
+          "minimum": 0,
+          "title": "Confidence Threshold",
+          "type": "integer"
+        },
+        "fallback_topk": {
+          "default": 2,
+          "minimum": 1,
+          "title": "Fallback Topk",
+          "type": "integer"
+        }
+      },
+      "title": "RoutingConfig",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "$ref": "#/$defs/DataConfig"
+    },
+    "retriever": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ComponentConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "matcher": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ComponentConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "locator": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ComponentConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "routing": {
+      "$ref": "#/$defs/RoutingConfig"
+    }
+  },
+  "required": [
+    "data"
+  ],
+  "title": "Config",
+  "type": "object"
+}

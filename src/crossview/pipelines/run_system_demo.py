@@ -10,6 +10,7 @@ from crossview.adaptors.io.results import (
 )
 from crossview.adaptors.io.simulation import export_simulation_json
 from crossview.core.metrics.selection import select_demo_records
+from crossview.paths import experiments_dir, outputs_dir
 from crossview.visualization.svg_map import render_position_svg
 
 
@@ -31,12 +32,14 @@ def main() -> None:
     )
     parser.add_argument(
         "--latest",
-        default=r"D:\GeoReg-CV\experiments\baseline_anyvisloc_scene01\LATEST_SCENE01_FULL_BASELINE.txt",
+        default=experiments_dir()
+        / "baseline_anyvisloc_scene01"
+        / "LATEST_SCENE01_FULL_BASELINE.txt",
         help="Pointer file containing archive_dir=...",
     )
     parser.add_argument(
         "--output",
-        default=r"D:\GeoReg-CV\outputs\scene01_system_demo",
+        default=outputs_dir() / "scene01_system_demo",
         help="Output directory for system-level geo-position and visualization files.",
     )
     args = parser.parse_args()
