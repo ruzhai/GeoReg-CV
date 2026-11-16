@@ -1,8 +1,8 @@
 anyvisloc:
-  root: D:/GD/Benchmark
-  config: D:/GD/Benchmark/config_selectable_matchers.yaml
-  dataset_root: D:/GD/Benchmark/Data/AnyVisLoc
-  save_dir: D:/GeoReg-CV/experiments/fast_baseline_ablation/fast_v3_true_top2_k1500_r03_limit120
+  root: ${CROSSVIEW_DATA_ROOT}
+  config: ${CROSSVIEW_DATA_ROOT}/config_selectable_matchers.yaml
+  dataset_root: ${CROSSVIEW_DATA_ROOT}/Data/AnyVisLoc
+  save_dir: ${CROSSVIEW_PROJECT_ROOT}/experiments/fast_baseline_ablation/fast_v3_true_top2_k1500_r03_limit120
 
 run:
   reference_mode: aerial

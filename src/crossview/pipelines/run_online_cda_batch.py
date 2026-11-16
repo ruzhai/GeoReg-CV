@@ -12,7 +12,7 @@ from datetime import datetime
 from pathlib import Path
 
 from crossview.adaptors.io.artifacts import TeeStream, save_outputs
-from crossview.paths import configs_dir, outputs_dir
+from crossview.paths import configs_dir, load_yaml, outputs_dir
 from crossview.pipelines.run_online_cda_sample import _run
 
 
@@ -67,10 +67,7 @@ def main() -> None:
     if not 0 < args.resize_ratio <= 1:
         raise ValueError("--resize-ratio must be in (0, 1]")
 
-    import yaml
-
-    with Path(args.config).open("r", encoding="utf-8") as f:
-        wrapper = yaml.safe_load(f)
+    wrapper = load_yaml(args.config)
     dataset_root = Path(wrapper["anyvisloc"]["dataset_root"])
     scene_root = dataset_root / args.scene
     samples = sorted(scene_root.glob("*.npz"), key=lambda p: p.name)

@@ -6,4 +6,4 @@ embedding_dim: 512
 device: cuda
 warmup: 20
 iterations: 100
-output_dir: D:/GeoReg-CV/experiments/lightweight_backbone/mobilenetv3_large
+output_dir: ${CROSSVIEW_PROJECT_ROOT}/experiments/lightweight_backbone/mobilenetv3_large

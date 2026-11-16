@@ -17,22 +17,27 @@ class MissingEnvVar(KeyError):
     """配置引用了未设置的环境变量。"""
 
 
-def expand_env(value: Any) -> Any:
-    """递归展开 ${VAR}。缺失的变量直接报错，不静默留空。"""
+def expand_env(value: Any, extra: dict[str, str] | None = None) -> Any:
+    """递归展开 ${VAR}。缺失的变量直接报错，不静默留空。
+
+    extra 提供内置变量（例如 CROSSVIEW_PROJECT_ROOT），优先于环境变量。
+    """
 
     if isinstance(value, str):
 
         def replace(match: re.Match[str]) -> str:
             name = match.group(1)
+            if extra and name in extra:
+                return extra[name]
             if name not in os.environ:
                 raise MissingEnvVar(f"配置引用了未设置的环境变量：{name}")
             return os.environ[name]
 
         return _ENV_PATTERN.sub(replace, value)
     if isinstance(value, dict):
-        return {k: expand_env(v) for k, v in value.items()}
+        return {k: expand_env(v, extra) for k, v in value.items()}
     if isinstance(value, list):
-        return [expand_env(v) for v in value]
+        return [expand_env(v, extra) for v in value]
     return value
 
 

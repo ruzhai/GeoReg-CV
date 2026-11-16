@@ -46,5 +46,19 @@ def configs_dir() -> Path:
     return project_root() / "configs"
 
 
+def load_yaml(path: str | Path) -> dict:
+    """读 YAML 并展开 ${VAR}。
+
+    内置 CROSSVIEW_PROJECT_ROOT，数据路径用 CROSSVIEW_DATA_ROOT。
+    """
+
+    import yaml
+
+    from crossview.schema.configs import expand_env
+
+    raw = yaml.safe_load(Path(path).read_text(encoding="utf-8")) or {}
+    return expand_env(raw, extra={"CROSSVIEW_PROJECT_ROOT": str(project_root())})
+
+
 def docs_dir() -> Path:
     return project_root() / "docs"

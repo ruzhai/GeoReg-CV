@@ -5,12 +5,11 @@ from pathlib import Path
 
 import yaml
 
-from crossview.paths import configs_dir
+from crossview.paths import configs_dir, load_yaml
 
 
 def build_command(config_path: Path) -> tuple[list[str], Path]:
-    with config_path.open("r", encoding="utf-8") as f:
-        cfg = yaml.safe_load(f)
+    cfg = load_yaml(config_path)
 
     avl = cfg["anyvisloc"]
     run = cfg["run"]

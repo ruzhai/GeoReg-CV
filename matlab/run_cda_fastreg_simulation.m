@@ -1,11 +1,15 @@
 function summary = run_cda_fastreg_simulation(jsonPath, outputDir)
 % Replay CDA-FastReg localization results in MATLAB.
 
+projectRoot = getenv('CROSSVIEW_PROJECT_ROOT');
+if isempty(projectRoot)
+    projectRoot = pwd;
+end
 if nargin < 1 || isempty(jsonPath)
-    jsonPath = 'D:\GeoReg-CV\outputs\scene01_cda_fastreg_demo\scene01_cda_simulation_points.json';
+    jsonPath = fullfile(projectRoot, 'outputs', 'scene01_cda_fastreg_demo', 'scene01_cda_simulation_points.json');
 end
 if nargin < 2 || isempty(outputDir)
-    outputDir = 'D:\GeoReg-CV\outputs\matlab_simulation';
+    outputDir = fullfile(projectRoot, 'outputs', 'matlab_simulation');
 end
 if ~isfile(jsonPath)
     error('Simulation JSON not found: %s', jsonPath);

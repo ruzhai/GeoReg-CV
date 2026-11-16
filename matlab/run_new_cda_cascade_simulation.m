@@ -3,11 +3,15 @@ function summary = run_new_cda_cascade_simulation(inputRoot, outputDir)
 % The input can be a directory containing per-sample cda_result.json files,
 % one cda_result.json file, or an already exported simulation JSON file.
 
+projectRoot = getenv('CROSSVIEW_PROJECT_ROOT');
+if isempty(projectRoot)
+    projectRoot = pwd;
+end
 if nargin < 1 || isempty(inputRoot)
-    inputRoot = 'D:\GeoReg-CV\outputs\online_cda\Scene_01';
+    inputRoot = fullfile(projectRoot, 'outputs', 'online_cda', 'Scene_01');
 end
 if nargin < 2 || isempty(outputDir)
-    outputDir = 'D:\GeoReg-CV\outputs\matlab_cascade_simulation';
+    outputDir = fullfile(projectRoot, 'outputs', 'matlab_cascade_simulation');
 end
 if ~isfolder(outputDir)
     mkdir(outputDir);

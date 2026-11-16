@@ -40,7 +40,7 @@ from crossview.imaging.geolocation import (  # noqa: E402
     locate_ground_truth_image_center_on_dsm,
 )
 from crossview.imaging.physical_validity import evaluate_pnp_physical_validity  # noqa: E402
-from crossview.paths import configs_dir, outputs_dir
+from crossview.paths import configs_dir, load_yaml, outputs_dir
 
 # Shared by the single-sample and batch entry points. The key includes the
 # official config and device so incompatible model instances are never mixed.
@@ -99,8 +99,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def _load_wrapper_config(path: Path) -> tuple[dict, dict]:
-    with path.open("r", encoding="utf-8") as file:
-        wrapper = yaml.safe_load(file)
+    wrapper = load_yaml(path)
     return wrapper["anyvisloc"], wrapper["run"]
 
 

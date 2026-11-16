@@ -53,3 +53,24 @@ def test_expand_env_is_recursive():
 
     os.environ["CV_A"] = "alpha"
     assert expand_env({"k": ["${CV_A}", {"n": "${CV_A}"}]}) == {"k": ["alpha", {"n": "alpha"}]}
+
+
+def test_load_yaml_injects_project_root(tmp_path):
+    from crossview.paths import load_yaml, project_root
+
+    path = tmp_path / "config.yaml"
+    path.write_text("save_dir: ${CROSSVIEW_PROJECT_ROOT}/experiments/x\n", encoding="utf-8")
+
+    data = load_yaml(path)
+    assert data["save_dir"] == f"{project_root()}/experiments/x"
+
+
+def test_missing_env_in_yaml_fails_loudly(tmp_path, monkeypatch):
+    from crossview.paths import load_yaml
+
+    monkeypatch.delenv("CROSSVIEW_DATA_ROOT", raising=False)
+    path = tmp_path / "config.yaml"
+    path.write_text("root: ${CROSSVIEW_DATA_ROOT}/Data\n", encoding="utf-8")
+
+    with pytest.raises(MissingEnvVar):
+        load_yaml(path)
