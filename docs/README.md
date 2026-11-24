@@ -7,7 +7,7 @@
 
 | 目录 | 放什么 | 生命周期 |
 |---|---|---|
-| `plan/` | 要做的事、阶段安排 | 会过时，需定期更新 |
+| `proposals/` | 方案、汇报稿、团队讨论材料 | 讨论中，未实施 |
 | `design-docs/` | 事前做的技术决定 | 改动少，改时说明理由 |
 | `guides/` | 具体怎么操作 | 随代码更新 |
 | `reports/` | 跑完之后的结论 | 一般不再改，新结论新开一篇 |
@@ -16,12 +16,19 @@
 | `schema/` | 脚本导出的 JSON Schema | **自动生成，不要手改** |
 | `figures/` | 文档引用的图 | 随文档更新 |
 
-判断新文档放哪：**它是在说"打算做什么"（plan）、"为什么这么设计"（design-docs）、"怎么做"（guides），还是"做完了结果如何"（reports）。**
+判断新文档放哪：**它是在说"打算做什么"（proposals）、"为什么这么设计"（design-docs）、"怎么做"（guides），还是"做完了结果如何"（reports）。**
 
-## plan/ — 计划
+## 写作约定
 
-- [experiment_plan.md](plan/experiment_plan.md) — 三阶段实验安排：baseline 固化 → 失败样本分析 → 几何引导改进。
-- [lightweight_backbone_next_steps.md](plan/lightweight_backbone_next_steps.md) — MobileNetV3 检索骨干的后续步骤；需要先训出 checkpoint 才能接入定位流程。
+- **未完成的工作一律标 TODO**：清单项用 `- [ ]`，标题上用小标题后缀 `【TODO】`
+- 文档开头写清来源和状态（讨论稿 / 已实施 / 已废弃）
+- 不写"以后再补"的占位段落，要么写 TODO，要么删掉
+
+## proposals/ — 方案与汇报
+
+- [overall-proposal.md](proposals/overall-proposal.md) — 整体实现与调研方案（讨论稿）：系统目标、两条数据流、公开数据集选型、实验设计、下一步调研分工。**尚未实施**，待办见文末。
+- [project-arrangement.md](proposals/project-arrangement.md) — 六阶段计划与 A/B/C/D 四角色分工。**六个阶段均未开始**。
+- `source/` — 上述两份材料的原始 PDF / DOCX。
 
 ## design-docs/ — 设计
 

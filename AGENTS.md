@@ -120,7 +120,7 @@ class GeoRegistrationRecord(BaseModel):
 
 | 目录 | 放什么 |
 |---|---|
-| `docs/plan/` | 要做的事、阶段安排（会过时） |
+| `docs/proposals/` | 方案、汇报稿、团队讨论材料（未实施） |
 | `docs/design-docs/` | 事前做的技术决定 |
 | `docs/guides/` | 具体怎么操作 |
 | `docs/reports/` | 跑完之后的结论（新结论新开一篇） |
