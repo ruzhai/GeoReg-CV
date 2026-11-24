@@ -90,7 +90,7 @@ python -m crossview.pipelines.run_online_cda_batch --scene Scene_01 --limit 20
 
 ## 协作
 
-- 工程约定：[AGENTS.md](AGENTS.md)（规则本体）、[CONTRIBUTING.md](CONTRIBUTING.md)（怎么用 Agent 协作）
+- 工程约定：[AGENTS.md](AGENTS.md)（规则本体）、[CONTRIBUTING.md](CONTRIBUTING.md)（新人全流程：环境、分支、提交、测试、PR）
 - **全部文档索引：[docs/README.md](docs/README.md)**
 - 契约说明：`docs/contracts/`
 - 设计文档：`docs/design-docs/`
