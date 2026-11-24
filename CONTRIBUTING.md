@@ -1,82 +1,102 @@
-# 参与 CrossView
+# 用 Agent 上手 CrossView
 
-这份是给人看的。工程细节和 AI 约束在 [AGENTS.md](AGENTS.md)，你不需要背。
+> 这份文档不是部署教程，也不是 Python 教学。
+> 它讲的是：**怎么让 AI Agent 读懂这个仓库、遵守它的规范、并且产出你能验收的改动。**
 
-## 开始之前
+## 0. 前提：仓库在这台机器上
+
+只有这一步需要你动手，后面基本都可以交给 Agent。
 
 ```bash
 git clone git@github.com:ruzhai/GeoReg-CV.git
 cd GeoReg-CV
-
 python -m venv .venv --system-site-packages
 source .venv/Scripts/activate        # Git Bash
 pip install -e ".[dev]"
-
-crossview-info                       # 自检
-python scripts/check.py              # 应该全绿
 ```
 
-`python scripts/check.py` 不绿就先别写代码，找负责人，不要自己想办法绕过。
+## 1. 第一件事：让它先读规范，别急着改代码
 
-## 动手前先确认它放在哪
-
-| 你想做的事 | 放这里 |
-|---|---|
-| 新的匹配器 / 检索器 / 骨干网络 | `adaptors/matchers/`、`adaptors/retrievers/` |
-| 新的几何算法（单应、PnP、误匹配剔除） | `core/geometry/` |
-| 新的候选选择或回退策略 | `core/routing/` |
-| 新的数据集适配 | `adaptors/datasets/` |
-| 新的演示脚本 | `pipelines/` |
-| 新的画图 | `visualization/` |
-
-不确定就问，不要猜着写。放错地方的代价是别人没法复用你的东西。
-
-## 新增一个方法：照着模板抄
-
-不要从空白文件开始，复制一份已有的改。
-
-1. 复制 `adaptors/matchers/_template.py`，改成你的名字
-2. 在 `registry.py` 加一行注册
-3. 在 `configs/experiments/` 复制一份 yaml，把 `name` 改成你的
-4. 加测试 `tests/adaptors/test_<你的名字>.py`，至少一个成功、一个失败
-5. 跑 `python scripts/check.py`
-6. 跑一次实验，复制 `experiments/_template/card.yaml` 填好
-
-**判据：如果你的方法必须改代码才能启用，说明接错了地方。**
-接对了的话，别人只改 yaml 里的 `name` 就能用你的方法。
-
-## 五个常见错误
+在仓库根目录打开 Agent，把这段贴进去：
 
 ```text
-❌ 在 core/ 里读图片、import cv2
-❌ 用 dict 在函数之间传结果
-❌ 把路径写成 D:\桌面放置\...
-❌ 测试红了去改断言
-❌ 一个 PR 改三个模块
+先读 AGENTS.md、docs/README.md、src/crossview/schema/__init__.py，
+然后回答三个问题：
+1. 这个项目的三条硬规则是什么？
+2. 我要新增一个匹配器，需要动哪些文件？
+3. 哪些目录我不该碰？
+先不要改任何文件。
 ```
 
-## 提交
+这一步的目的不是学知识，是**确认它真的读了**。它答得含糊或者编造路径，后面的活别交给它。
+
+## 2. 让它建立项目地图
 
 ```text
-分支      feat/候选重排
-commit    feat: 给候选重排加入内点权重
-PR 标题    给候选重排加入内点权重
-PR 描述    对应 issue #12
-           改了什么：……
-           影响契约：无 / 改了 schema（已升 1.1）
-           跑过：python scripts/check.py 全绿；Scene_01 前 20 个样本
+给我一张表：src/crossview/ 下每个子目录负责什么、不负责什么；
+再指出四条线（时间对齐 / 空间配准 / 重识别 / 系统集成）各自的代码入口。
 ```
 
-用中文写。三个人都看得快，英文只会让你写得更含糊。
+期望产出是一张能直接贴进 PR 描述的表。如果它写出了仓库里不存在的目录，说明它在猜。
 
-## 每周
+## 3. 提需求的方式
 
-- 每个实验写一张实验卡，没跑实验就不用写
-- 周会只看实验卡和 issue 板，不看代码
-- 卡住了在 issue 里说"试了什么、报错是什么"，不要自己硬试超过两次
+四行模板，缺一行它就会自由发挥：
 
-## 什么时候可以不走流程
+```text
+背景：为什么要做这个改动
+要改哪里：具体到文件或目录
+期望行为：改完之后什么变了
+不能动：契约 src/crossview/schema/、测试断言
+验收：python scripts/check.py 全绿
+```
 
-改注释、改文档、改错别字、修 typo，直接提 PR，不用建 issue，不用写实验卡。
+## 4. 第一个任务：加一个空壳，不写实现
 
-**其他一切都走流程。** 流程的作用是让你三个月后还能看懂自己写的东西。
+不要一上来就让它实现算法。先让它走通接入流程：
+
+```text
+照 src/crossview/adaptors/matchers/_template.py 复制一份，
+类名改成 XxxMatcher，注册名 xxx，
+match() 里先 raise NotImplementedError，旁边写一行 TODO 说明要怎么实现。
+然后在 configs/ 下加一份 yaml，让配置里能选中它。
+最后加一个测试，只验证注册成功。
+```
+
+**判据：不改代码、只改 yaml 里的 name，就能选中你的方法。**做不到说明接错了地方。
+
+## 5. 验收 Agent 的产出
+
+三件事，顺序不能反：
+
+1. **跑 `python scripts/check.py`** —— 不绿不合
+2. **看 diff** —— 改了多少行？有没有动不相干的文件？
+3. **问它"为什么这么改"** —— 答不上来的地方，就是你不该合的地方
+
+**理解门槛**：核心算法代码，你必须能讲清每一步在干什么。讲不清就先别合，让它重写，或者你自己拆小。
+
+## 6. 红线：Agent 最常犯的四种错
+
+| 错误做法 | 为什么危险 | 怎么拦 |
+|---|---|---|
+| 改 schema 但不升版本 | 旧的落盘结果读不出来 | 契约改动必须人工确认 |
+| 为了让测试过而放宽断言 | 永久失去发现问题的能力 | 只允许「修代码」或「改测试+说明理由」 |
+| 写死 `D:\...` 路径 | 换机器直接崩 | CI + review |
+| 一次改很多文件 | 出问题无法定位 | 一个 PR 只做一件事 |
+
+## 7. 这些事不要交给 Agent
+
+- **决定做什么**：范围、优先级、先做哪条线
+- **判断结果对不对**：精度够不够、失败原因是什么
+- **合并前的最终 review**
+- **契约变更**：改 `src/crossview/schema/` 必须人看
+
+## 附录：常用命令
+
+```bash
+crossview-info                    # 自检：版本、路径、已注册组件
+python scripts/check.py           # lint + 格式 + 类型 + 测试
+python scripts/export_schemas.py  # 改了契约后重新导出 JSON Schema
+```
+
+详细的工程规则见 [AGENTS.md](AGENTS.md)，文档分类见 [docs/README.md](docs/README.md)。
