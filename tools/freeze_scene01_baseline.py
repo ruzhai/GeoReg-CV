@@ -16,6 +16,7 @@ ARCHIVE_DIR = Path(
     r"\frozen_scene01_full_baseline_20260809-2323"
 )
 DOCS_DIR = Path(docs_dir())
+REPORTS_DIR = DOCS_DIR / "reports"
 
 
 def read_json(path: Path):
@@ -66,6 +67,7 @@ def main() -> None:
 
     ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
     source_files = [
         "summary.json",
@@ -311,7 +313,7 @@ def main() -> None:
 
     report_path = ARCHIVE_DIR / "scene01_baseline_analysis_report.md"
     report_path.write_text(report, encoding="utf-8-sig")
-    shutil.copy2(report_path, DOCS_DIR / "scene01_baseline_analysis_report.md")
+    shutil.copy2(report_path, REPORTS_DIR / "scene01_baseline_analysis_report.md")
 
     readme = f"""# Frozen Scene_01 Full Baseline
 
@@ -342,7 +344,7 @@ See `scene01_baseline_analysis_report.md` for the full analysis.
 
     print(f"Frozen archive: {ARCHIVE_DIR}")
     print(f"Report: {report_path}")
-    print(f"Docs copy: {DOCS_DIR / 'scene01_baseline_analysis_report.md'}")
+    print(f"Docs copy: {REPORTS_DIR / 'scene01_baseline_analysis_report.md'}")
     print(f"Copied files: {len(copied)}")
 
 

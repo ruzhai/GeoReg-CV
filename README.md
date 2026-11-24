@@ -91,6 +91,7 @@ python -m crossview.pipelines.run_online_cda_batch --scene Scene_01 --limit 20
 ## 协作
 
 - 工程约定：[AGENTS.md](AGENTS.md)（给 AI 与评审）、[CONTRIBUTING.md](CONTRIBUTING.md)（给人）
+- **全部文档索引：[docs/README.md](docs/README.md)**
 - 契约说明：`docs/contracts/`
 - 设计文档：`docs/design-docs/`
 - 实验卡：`experiments/_template/card.yaml`

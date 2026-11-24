@@ -116,8 +116,21 @@ class GeoRegistrationRecord(BaseModel):
 
 ## 文档与实验
 
-- 设计文档进 `docs/design-docs/`，按阶段命名
-- 每个不可逆的技术决定写一页 ADR，进 `docs/adr/`
+文档按用途分目录，入口是 `docs/README.md`：
+
+| 目录 | 放什么 |
+|---|---|
+| `docs/plan/` | 要做的事、阶段安排（会过时） |
+| `docs/design-docs/` | 事前做的技术决定 |
+| `docs/guides/` | 具体怎么操作 |
+| `docs/reports/` | 跑完之后的结论（新结论新开一篇） |
+| `docs/contracts/` | 接口与数据格式约定 |
+| `docs/adr/` | 不可逆决策，只增不改 |
+| `docs/schema/` | 脚本导出，**不要手改** |
+
+规则：
+
+- **新增文档必须在 `docs/README.md` 加一行说明**，否则下一个人不知道它是干什么的
 - 每个实验一份 `card.yaml` 进 `experiments/<id>/`；只提交 card 和 summary，不提交产物
 - 周会材料进 `docs/weekly-material/`
 - 文档里的路径和命令必须能在当前仓库跑通，不许写"理论上的"路径

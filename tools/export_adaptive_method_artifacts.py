@@ -8,6 +8,7 @@ SIM_DIR = Path(experiments_dir() / "fast_baseline_ablation" / "adaptive_strategy
 OUT_DIR = Path(experiments_dir() / "fast_baseline_ablation" / "adaptive_method_artifacts")
 DOCS_DIR = Path(docs_dir())
 FIG_DIR = DOCS_DIR / "figures"
+REPORTS_DIR = DOCS_DIR / "reports"
 
 
 def read_csv(path: Path):
@@ -152,6 +153,7 @@ def render_flow_svg(path: Path):
 def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     FIG_DIR.mkdir(parents=True, exist_ok=True)
 
     summary_path = SIM_DIR / "adaptive_strategy_summary.csv"
@@ -222,7 +224,7 @@ fallback = Top2
 """
     report_path = OUT_DIR / "cda_fastreg_method_report.md"
     report_path.write_text(report, encoding="utf-8-sig")
-    (DOCS_DIR / "cda_fastreg_method_report.md").write_text(report, encoding="utf-8-sig")
+    (REPORTS_DIR / "cda_fastreg_method_report.md").write_text(report, encoding="utf-8-sig")
 
     manifest = {
         "method": "CDA-FastReg",
@@ -237,7 +239,7 @@ fallback = Top2
     )
 
     print(f"Report: {report_path}")
-    print(f"Docs copy: {DOCS_DIR / 'cda_fastreg_method_report.md'}")
+    print(f"Docs copy: {REPORTS_DIR / 'cda_fastreg_method_report.md'}")
     print(f"Paper table: {table_csv}")
     print(f"Flow SVG: {flow_svg}")
 
