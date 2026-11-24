@@ -1,6 +1,6 @@
 # 参与 CrossView
 
-这份是给人看的。工程细节和 AI 约束在 [AGENTS.md](AGENTS.md)，你不需要背。
+这份是给人看的。工程细节和 AI 约束在 [AGENTS.md](AGENTS.md)。
 
 ## 开始之前
 
@@ -16,7 +16,7 @@ crossview-info                       # 自检
 python scripts/check.py              # 应该全绿
 ```
 
-`python scripts/check.py` 不绿就先别写代码，找负责人，不要自己想办法绕过。
+`python scripts/check.py` 一般会绿，不绿AI会想办法帮你绿。
 
 ## 动手前先确认它放在哪
 
@@ -29,7 +29,7 @@ python scripts/check.py              # 应该全绿
 | 新的演示脚本 | `pipelines/` |
 | 新的画图 | `visualization/` |
 
-不确定就问，不要猜着写。放错地方的代价是别人没法复用你的东西。
+不确定就查相关文档，发现文档里没有不要直接建立新规则，及时联系负责人讨论，完善所有板块的规则文件。
 
 ## 新增一个方法：照着模板抄
 
