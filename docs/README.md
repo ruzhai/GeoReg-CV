@@ -26,9 +26,9 @@
 
 ## proposals/ — 方案与汇报
 
-- [overall-proposal.md](proposals/overall-proposal.md) — 整体实现与调研方案（讨论稿）：系统目标、两条数据流、公开数据集选型、实验设计、下一步调研分工。**尚未实施**，待办见文末。
-- [project-arrangement.md](proposals/project-arrangement.md) — 六阶段计划与 A/B/C/D 四角色分工。**六个阶段均未开始**。
-- `source/` — 上述两份材料的原始 PDF / DOCX。
+- [overall-proposal.md](proposals/overall-proposal.md) — 方案**骨架**：只保留一句话结论、已知设定和待办，全文见 `source/`。
+- [project-arrangement.md](proposals/project-arrangement.md) — 阶段表 + 角色表两张表格，六个阶段均未开始。
+- `source/` — 上述两份材料的原始 PDF / DOCX，需要细节时直接读原件。
 
 ## design-docs/ — 设计
 
